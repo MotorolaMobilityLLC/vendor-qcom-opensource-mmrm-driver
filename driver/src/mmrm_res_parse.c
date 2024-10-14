@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
- * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2020-2024, The Linux Foundation. All rights reserved.
  */
 
 #include <linux/types.h>
@@ -74,8 +74,14 @@ static int mmrm_load_mm_rail_corner_table(
 		goto err_load_corner_tbl;
 	}
 
+	if (num_corners > MMRM_VDD_LEVEL_MAX) {
+		d_mpr_e("%s: invalid number of mm rail corners\n", __func__);
+		rc = -EINVAL;
+		goto err_load_corner_tbl;
+	}
+
 	corners->corner_tbl = devm_kzalloc(&pdev->dev,
-		sizeof(*corners->corner_tbl) * num_corners, GFP_KERNEL);
+		sizeof(*corners->corner_tbl) * MMRM_VDD_LEVEL_MAX, GFP_KERNEL);
 	if (!corners->corner_tbl) {
 		d_mpr_e("%s: failed to allocate memory for corner_tbl\n",
 			__func__);
