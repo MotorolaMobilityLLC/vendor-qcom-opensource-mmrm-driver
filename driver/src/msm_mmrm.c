@@ -10,7 +10,7 @@
 #include <linux/soc/qcom/msm_mmrm.h>
 #include <linux/fs.h>
 #include <linux/of.h>
-
+#include <linux/version.h>
 #include "mmrm_internal.h"
 #include "mmrm_debug.h"
 #include "mmrm_clk_rsrc_mgr.h"
@@ -542,7 +542,7 @@ err_exit:
 	return rc;
 }
 
-static int msm_mmrm_remove(struct platform_device *pdev)
+static int __remove(struct platform_device *pdev)
 {
 	int rc = 0;
 
@@ -570,6 +570,18 @@ err_exit:
 	d_mpr_e("%s: error = %d\n", __func__, rc);
 	return rc;
 }
+
+#if (KERNEL_VERSION(6, 10, 0) <= LINUX_VERSION_CODE)
+static void msm_mmrm_remove(struct platform_device *pdev)
+{
+	__remove(pdev);
+}
+#else
+static int msm_mmrm_remove(struct platform_device *pdev)
+{
+	return __remove(pdev);
+}
+#endif
 
 static const struct of_device_id msm_mmrm_dt_match[] = {
 	{.compatible = "qcom,msm-mmrm"},
