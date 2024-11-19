@@ -1,4 +1,4 @@
-load("//build/kernel/kleaf:kernel.bzl", "ddk_module", "ddk_submodule")
+load("//build/kernel/kleaf:kernel.bzl", "ddk_module", "kernel_module_group")
 load("//build/bazel_common_rules/dist:dist.bzl", "copy_to_dist_dir")
 
 def _register_module_to_map(module_map, name, path, config_option, srcs, deps):
@@ -39,7 +39,7 @@ def mmrm_driver_modules_entry(hdrs = []):
 
 def define_target_variant_modules(target, variant, registry, modules, config_options = []):
     kernel_build = "{}_{}".format(target, variant)
-    kernel_build_label = "//msm-kernel:{}".format(kernel_build)
+    kernel_build_label = "//soc-repo:{}_base_kernel".format(kernel_build)
     modules = [registry.get(module_name) for module_name in modules]
     options = _get_kernel_build_options(modules, config_options)
     build_print = lambda message : print("{}: {}".format(kernel_build, message))
@@ -53,23 +53,25 @@ def define_target_variant_modules(target, variant, registry, modules, config_opt
         if not module_srcs:
             continue
 
-        ddk_submodule(
+        ddk_module(
             name = rule_name,
             srcs = module_srcs,
             out = "{}.ko".format(module.name),
-            deps = ["//msm-kernel:all_headers"] + registry.hdrs,
-            local_defines = options.keys()
+            deps = ["//soc-repo:all_headers",
+                    "//soc-repo:{}/drivers/clk/qcom/clk-qcom".format(kernel_build)] + registry.hdrs,
+            local_defines = options.keys(),
+            kernel_build = kernel_build_label,
         )
         all_module_rules.append(rule_name)
 
-    ddk_module(
-        name = "{}_mmrm_driver".format(kernel_build),
-        kernel_build = kernel_build_label,
-        deps = all_module_rules,
+    kernel_module_group(
+        name = "{}_mmrm_modules".format(kernel_build),
+        srcs = all_module_rules,
     )
+
     copy_to_dist_dir(
         name = "{}_mmrm_driver_dist".format(kernel_build),
-        data = [":{}_mmrm_driver".format(kernel_build)],
+        data = [":{}_mmrm_modules".format(kernel_build)],
         dist_dir = "out/target/product/{}/dlkm/lib/modules/".format(target),
         flat = True,
         wipe_dist_dir = False,
