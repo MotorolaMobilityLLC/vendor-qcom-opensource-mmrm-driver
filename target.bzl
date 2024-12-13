@@ -1,9 +1,9 @@
 load(":mmrm_modules.bzl", "mmrm_driver_modules")
 load(":mmrm_modules_build.bzl", "define_target_variant_modules")
-load("//soc-repo:target_variants.bzl", "all_target_variants")
+load(":target_variants.bzl", "get_all_variants")
 
 def define_target_modules():
-    for target, variant in all_target_variants():
+    for target, variant in get_all_variants():
         define_target_variant_modules(
             target = target,
             variant = variant,
