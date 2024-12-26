@@ -77,13 +77,13 @@ def define_target_variant_modules(target, variant, registry, modules, config_opt
         all_module_rules.append(rule_name)
 
     kernel_module_group(
-        name = "{}_mmrm_modules".format(kernel_build),
+        name = "{}_mmrm_driver".format(kernel_build),
         srcs = all_module_rules,
     )
 
     copy_to_dist_dir(
         name = "{}_mmrm_driver_dist".format(kernel_build),
-        data = [":{}_mmrm_modules".format(kernel_build)],
+        data = [":{}_mmrm_driver".format(kernel_build)],
         dist_dir = "out/target/product/{}/dlkm/lib/modules/".format(target),
         flat = True,
         wipe_dist_dir = False,
