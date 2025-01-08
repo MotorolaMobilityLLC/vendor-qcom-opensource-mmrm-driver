@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
- * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2024-2025, Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <linux/types.h>
@@ -89,6 +89,29 @@ static struct mmrm_throttle_clients_data common_pt_throttle_clients_data_sun[] =
 	},
 };
 
+static struct mmrm_throttle_clients_data common_pt_throttle_clients_data_canoe[] = {
+	{
+		.domain = MMRM_CLIENT_DOMAIN_DISPLAY,
+		.id = 0x44,
+	},
+	{
+		.domain = MMRM_CLIENT_DOMAIN_VIDEO,
+		.id = 0x03,
+	},
+	{
+		.domain = MMRM_CLIENT_DOMAIN_CAMERA,
+		.id = 0x40,
+	},
+	{
+		.domain = MMRM_CLIENT_DOMAIN_CVP,
+		.id = 0x03,
+	},
+	{
+		.domain = MMRM_CLIENT_DOMAIN_CAMERA,
+		.id = 0x49,
+	},
+};
+
 static struct mmrm_platform_data commom_pt_platform_data = {
 	.common_data = common_pt_data,
 	.common_data_length = ARRAY_SIZE(common_pt_data),
@@ -110,6 +133,13 @@ static struct mmrm_platform_data commom_pt_platform_data_sun = {
 	.throttle_clk_clients_data_length = ARRAY_SIZE(common_pt_throttle_clients_data_sun),
 };
 
+static struct mmrm_platform_data commom_pt_platform_data_canoe = {
+	.common_data = common_pt_data,
+	.common_data_length = ARRAY_SIZE(common_pt_data),
+	.throttle_clk_clients_data = common_pt_throttle_clients_data_canoe,
+	.throttle_clk_clients_data_length = ARRAY_SIZE(common_pt_throttle_clients_data_canoe),
+};
+
 static const struct of_device_id mmrm_dt_match[] = {
 	{
 		.compatible = "qcom,waipio-mmrm",
@@ -126,6 +156,10 @@ static const struct of_device_id mmrm_dt_match[] = {
 	{
 		.compatible = "qcom,sun-mmrm",
 		.data = &commom_pt_platform_data_sun,
+	},
+	{
+		.compatible = "qcom,canoe-mmrm",
+		.data = &commom_pt_platform_data_canoe,
 	},
 	{},
 };
