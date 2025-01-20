@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 /*
  * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
- * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2025, Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #ifndef _MMRM_CLK_RESOURCE_MGR_H_
@@ -19,22 +19,26 @@ enum mmrm_clk_mgr_scheme {
 };
 
 enum mmrm_sw_vdd_levels {
+	MMRM_VDD_LEVEL_LOW_SVS_D1,
 	MMRM_VDD_LEVEL_LOW_SVS,
 	MMRM_VDD_LEVEL_SVS,
 	MMRM_VDD_LEVEL_SVS_L1,
 	MMRM_VDD_LEVEL_NOM,
 	MMRM_VDD_LEVEL_NOM_L1,
 	MMRM_VDD_LEVEL_TURBO,
+	MMRM_VDD_LEVEL_TURBO_L1,
 	MMRM_VDD_LEVEL_MAX
 };
 
 static int mmrm_sw_vdd_corner[] = {
+	[MMRM_VDD_LEVEL_LOW_SVS_D1] = RPMH_REGULATOR_LEVEL_LOW_SVS_D1,
 	[MMRM_VDD_LEVEL_LOW_SVS] = RPMH_REGULATOR_LEVEL_LOW_SVS,
 	[MMRM_VDD_LEVEL_SVS] = RPMH_REGULATOR_LEVEL_SVS,
 	[MMRM_VDD_LEVEL_SVS_L1] = RPMH_REGULATOR_LEVEL_SVS_L1,
 	[MMRM_VDD_LEVEL_NOM] = RPMH_REGULATOR_LEVEL_NOM,
 	[MMRM_VDD_LEVEL_NOM_L1] = RPMH_REGULATOR_LEVEL_NOM_L1,
-	[MMRM_VDD_LEVEL_TURBO] = RPMH_REGULATOR_LEVEL_TURBO
+	[MMRM_VDD_LEVEL_TURBO] = RPMH_REGULATOR_LEVEL_TURBO,
+	[MMRM_VDD_LEVEL_TURBO_L1] = RPMH_REGULATOR_LEVEL_TURBO_L1,
 };
 
 #define MMRM_SW_CLIENTS_NUM_MAX 35
