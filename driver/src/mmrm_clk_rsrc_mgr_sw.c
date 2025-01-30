@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
- * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2025, Qualcomm Innovation Center, Inc. All rights reserved.
  */
 #include <linux/slab.h>
 #include <dt-bindings/regulator/qcom,rpmh-regulator-levels.h>
@@ -54,9 +54,9 @@ static int mmrm_sw_update_freq(
 
 			/* Get voltage corner */
 			voltage_corner = qcom_clk_get_voltage(tbl_entry->clk, clk_val_round);
-			if (voltage_corner < 0 || voltage_corner > mmrm_sw_vdd_corner[MMRM_VDD_LEVEL_TURBO]) {
+			if (voltage_corner < 0 ||
+			    voltage_corner > mmrm_sw_vdd_corner[MMRM_VDD_LEVEL_TURBO_L1])
 				break;
-			}
 
 			/* voltage corner is below svsl1 */
 			if (voltage_corner < mmrm_sw_vdd_corner[MMRM_VDD_LEVEL_LOW_SVS])
@@ -487,7 +487,7 @@ static int mmrm_sw_get_req_level(
 
 	/* get voltage corner */
 	voltage_corner = qcom_clk_get_voltage(tbl_entry->clk, clk_round_val);
-	if (voltage_corner < 0 || voltage_corner > mmrm_sw_vdd_corner[MMRM_VDD_LEVEL_TURBO]) {
+	if (voltage_corner < 0 || voltage_corner > mmrm_sw_vdd_corner[MMRM_VDD_LEVEL_TURBO_L1]) {
 		d_mpr_e("%s: csid(0x%x): invalid voltage corner(%d) for rounded clk rate(%lu)\n",
 			__func__,
 			tbl_entry->clk_src_id,
