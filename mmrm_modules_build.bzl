@@ -40,17 +40,17 @@ def mmrm_driver_modules_entry(hdrs = []):
 def define_target_variant_modules(target, variant, registry, modules, config_options = []):
     kernel_build = "{}_{}".format(target, variant)
     deps = select({
-        "//build/kernel/kleaf:socrepo_true": [
+        "//build/qcom_build_extensions:qtisocrepo_true": [
             "//soc-repo:all_headers",
             "//soc-repo:{}/drivers/clk/qcom/clk-qcom".format(kernel_build),
         ],
-        "//build/kernel/kleaf:socrepo_false": [
+        "//build/qcom_build_extensions:qtisocrepo_false": [
             "//msm-kernel:all_headers",
         ],
     })
     kernel_build_label = select({
-        "//build/kernel/kleaf:socrepo_true": "//soc-repo:{}_base_kernel".format(kernel_build),
-        "//build/kernel/kleaf:socrepo_false": "//msm-kernel:{}".format(kernel_build),
+        "//build/qcom_build_extensions:qtisocrepo_true": "//soc-repo:{}_base_kernel".format(kernel_build),
+        "//build/qcom_build_extensions:qtisocrepo_false": "//msm-kernel:{}".format(kernel_build),
     })
 
     modules = [registry.get(module_name) for module_name in modules]
